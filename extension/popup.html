@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>TRUTH-GUARD</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      width: 300px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    #analyzeButton {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    #analyzeButton:hover {
+      background-color: #0056b3;
+    }
+
+    #results {
+      font-size: 14px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    em {
+      color: #666;
+    }
+
+    p {
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>📰 TRUTH-GUARD</h2>
+  <button id="analyzeButton">🔍 Analyze Current Page</button>
+  <div id="results"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+

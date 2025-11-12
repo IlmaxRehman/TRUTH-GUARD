@@ -1,0 +1,68 @@
+{
+  "manifest_version": 3,
+  "name": "FactCheck - Fake News Detection",
+  "version": "1.0.0",
+  "description": "Analyze news articles and detect potential fake news using NLP and machine learning",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icon-16.svg",
+      "48": "icon-48.svg",
+      "128": "icon-128.svg"
+    },
+    "default_title": "FactCheck - Analyze this article"
+  },
+  "icons": {
+    "16": "icon-16.svg",
+    "48": "icon-48.svg",
+    "128": "icon-128.svg"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "notifications",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F"
+      },
+      "description": "Analyze current article"
+    },
+    "toggle_overlay": {
+      "suggested_key": {
+        "default": "Alt+Shift+F",
+        "mac": "Alt+Shift+F"
+      },
+      "description": "Toggle fact-check overlay"
+    }
+  },
+  "options_ui": {
+    "page": "index.html#/settings",
+    "open_in_tab": false
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["icon-16.svg", "icon-48.svg", "icon-128.svg"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

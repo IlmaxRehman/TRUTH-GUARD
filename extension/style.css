@@ -1,0 +1,73 @@
+
+/* Minimal Tailwind CSS you can paste into extension/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #111827;
+  color: white;
+  padding: 1rem;
+  width: 340px;
+}
+
+button {
+  background-color: #db2777;
+  transition: background-color 0.3s ease;
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+button:hover {
+  background-color: #be185d;
+}
+
+h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #f472b6;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #22d3ee;
+  margin-bottom: 0.5rem;
+}
+
+#results {
+  font-size: 0.875rem;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: #67e8f9;
+}
+
+.card-badge {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.card-text {
+  color: #d1d5db;
+  font-size: 0.875rem;
+}
