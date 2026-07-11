@@ -5,6 +5,7 @@ from app.schemas.analysis import AnalysisRequest
 
 from app.services.article_extractor import ArticleExtractor
 from app.services.claim_extractor import ClaimExtractor
+from app.services.evidence_retriever import EvidenceRetriever
 
 router = APIRouter()
 
@@ -17,8 +18,13 @@ def analyze(request: AnalysisRequest):
         article_data = ArticleExtractor.extract(request.url)
 
         extractor = ClaimExtractor()
+        retriever = EvidenceRetriever()
 
         claims = extractor.extract(article_data.content)
+
+        for claim in claims:
+
+            claim.evidence = retriever.search(claim.text)
 
         return AnalysisResult(
             article=article_data.article,

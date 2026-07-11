@@ -5,7 +5,5 @@ from app.models.claim import Claim
 
 
 class AnalysisResult(BaseModel):
-
     article: Article
-
     claims: list[Claim]
