@@ -6,6 +6,7 @@ from app.schemas.analysis import AnalysisRequest
 from app.services.article_extractor import ArticleExtractor
 from app.services.claim_extractor import ClaimExtractor
 from app.services.evidence_retriever import EvidenceRetriever
+from app.services.evidence_ranker import EvidenceRanker
 
 router = APIRouter()
 
@@ -19,12 +20,18 @@ def analyze(request: AnalysisRequest):
 
         extractor = ClaimExtractor()
         retriever = EvidenceRetriever()
+        ranker = EvidenceRanker()
 
         claims = extractor.extract(article_data.content)
 
         for claim in claims:
 
-            claim.evidence = retriever.search(claim.text)
+            evidence = retriever.search(claim.text)
+
+            claim.evidence = ranker.rank(
+                claim.text,
+                evidence
+            )
 
         return AnalysisResult(
             article=article_data.article,
