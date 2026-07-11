@@ -1,44 +1,37 @@
-import requests
 import trafilatura
 
 from app.models.article import Article
 
 
+class ExtractedArticle:
+
+    def __init__(self, article: Article, content: str):
+        self.article = article
+        self.content = content
+
+
 class ArticleExtractor:
 
     @staticmethod
-    def extract(url: str) -> Article:
+    def extract(url: str):
 
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 "
-                "(KHTML, like Gecko) "
-                "Chrome/137.0 Safari/537.36"
-            )
-        }
+        downloaded = trafilatura.fetch_url(url)
 
-        response = requests.get(
-            url,
-            headers=headers,
-            timeout=20
-        )
-
-        if response.status_code != 200:
-            raise Exception(
-                f"Website returned status code {response.status_code}"
-            )
-
-        downloaded = response.text
+        if downloaded is None:
+            raise Exception("Failed to download webpage.")
 
         content = trafilatura.extract(downloaded)
 
-        if not content:
-            raise Exception("Unable to extract article.")
+        if content is None:
+            raise Exception("Failed to extract article.")
 
-        return Article(
+        article = Article(
             url=url,
             title="",
-            content=content,
             word_count=len(content.split())
+        )
+
+        return ExtractedArticle(
+            article=article,
+            content=content
         )
