@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 
-from app.core.trusted_sources import TRUSTED_DOMAINS
+from app.core.trusted_domains import TRUSTED_DOMAINS
 from app.models.evidence import Evidence
 
 
@@ -17,39 +17,67 @@ class CredibilityEngine:
             if trusted_domain in domain:
                 return score
 
-        return 0.60
+        return 30
 
     def calculate(self, evidence_list: list[Evidence]):
 
         if not evidence_list:
             return 0
 
-        semantic = sum(e.score for e in evidence_list) / len(evidence_list)
-
-        trust = sum(
-            self.get_source_score(e.url)
-            for e in evidence_list
-        ) / len(evidence_list)
-
-        final = (
-            semantic * 0.65 +
-            trust * 0.35
+        semantic_score = (
+            sum(e.score for e in evidence_list)
+            / len(evidence_list)
         ) * 100
 
-        return round(final, 2)
+        trust_score = (
+            sum(
+                self.get_source_score(e.url)
+                for e in evidence_list
+            )
+            / len(evidence_list)
+        )
+
+        unique_domains = {
+
+            urlparse(e.url).netloc.replace("www.", "")
+
+            for e in evidence_list
+
+        }
+
+        diversity_score = min(
+
+            len(unique_domains) * 15,
+
+            100
+
+        )
+
+        final_score = (
+
+            semantic_score * 0.50 +
+
+            trust_score * 0.35 +
+
+            diversity_score * 0.15
+
+        )
+
+        return round(final_score, 2)
 
     def verdict(self, score: float):
 
         if score >= 90:
             return "Highly Credible", "Very High"
 
-        if score >= 75:
+        elif score >= 75:
             return "Likely Credible", "High"
 
-        if score >= 60:
+        elif score >= 60:
             return "Partially Supported", "Medium"
 
-        if score >= 40:
+        elif score >= 40:
             return "Weak Evidence", "Low"
 
-        return "Not Supported", "Very Low"
+        else:
+            return "Unsupported", "Very Low"
