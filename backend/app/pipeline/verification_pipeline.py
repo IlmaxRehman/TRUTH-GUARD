@@ -6,6 +6,7 @@ from app.services.claim_extractor import ClaimExtractor
 from app.services.evidence_retriever import EvidenceRetriever
 from app.services.evidence_ranker import EvidenceRanker
 from app.services.credibility_engine import CredibilityEngine
+from app.services.explanation_generator import ExplanationGenerator
 
 
 class VerificationPipeline:
@@ -21,6 +22,8 @@ class VerificationPipeline:
         self.evidence_ranker = EvidenceRanker()
 
         self.credibility_engine = CredibilityEngine()
+
+        self.explanation_generator = ExplanationGenerator()
 
     def verify(self, url: str):
 
@@ -51,10 +54,17 @@ class VerificationPipeline:
                 self.credibility_engine.verdict(score)
             )
 
+            reason = self.explanation_generator.generate(
+              claim,
+              ranked,
+              score
+            )
+
             claim.evidence = ranked
             claim.credibility_score = score
             claim.verdict = verdict
             claim.confidence = confidence
+            claim.reason = reason
 
             scores.append(score)
 

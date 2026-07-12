@@ -14,3 +14,5 @@ class Claim(BaseModel):
     verdict: str | None = None
 
     confidence: str | None = None
+
+    reason: str | None = None
