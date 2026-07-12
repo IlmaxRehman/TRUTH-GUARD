@@ -7,6 +7,7 @@ from app.services.article_extractor import ArticleExtractor
 from app.services.claim_extractor import ClaimExtractor
 from app.services.evidence_retriever import EvidenceRetriever
 from app.services.evidence_ranker import EvidenceRanker
+from app.services.credibility_engine import CredibilityEngine
 
 router = APIRouter()
 
@@ -21,6 +22,7 @@ def analyze(request: AnalysisRequest):
         extractor = ClaimExtractor()
         retriever = EvidenceRetriever()
         ranker = EvidenceRanker()
+        engine = CredibilityEngine()
 
         claims = extractor.extract(article_data.content)
 
@@ -28,9 +30,15 @@ def analyze(request: AnalysisRequest):
 
             evidence = retriever.search(claim.text)
 
-            claim.evidence = ranker.rank(
+            ranked = ranker.rank(
                 claim.text,
                 evidence
+            )
+
+            claim.evidence = ranked
+
+            claim.credibility_score = engine.calculate(
+                ranked
             )
 
         return AnalysisResult(
