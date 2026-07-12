@@ -1,5 +1,4 @@
 import trafilatura
-from newspaper import Article as NewspaperArticle
 
 from app.models.article import Article
 
@@ -16,67 +15,29 @@ class ArticleExtractor:
     @staticmethod
     def extract(url: str):
 
-        # -----------------------------
-        # Strategy 1 : Trafilatura
-        # -----------------------------
-        try:
+        downloaded = trafilatura.fetch_url(url)
 
-            downloaded = trafilatura.fetch_url(url)
+        if not downloaded:
+            raise Exception("Unable to download webpage.")
 
-            if downloaded:
+        content = trafilatura.extract(downloaded)
 
-                content = trafilatura.extract(downloaded)
+        if not content:
+            raise Exception("Unable to extract article.")
 
-                metadata = trafilatura.extract_metadata(downloaded)
+        metadata = trafilatura.extract_metadata(downloaded)
 
-                if content:
+        title = ""
+        if metadata and metadata.title:
+            title = metadata.title
 
-                    title = ""
+        article = Article(
+            url=url,
+            title=title,
+            word_count=len(content.split())
+        )
 
-                    if metadata and metadata.title:
-                        title = metadata.title
-
-                    article = Article(
-                        url=url,
-                        title=title,
-                        word_count=len(content.split())
-                    )
-
-                    return ExtractedArticle(
-                        article=article,
-                        content=content
-                    )
-
-        except Exception:
-            pass
-
-        # -----------------------------
-        # Strategy 2 : Newspaper4k
-        # -----------------------------
-        try:
-
-            article = NewspaperArticle(url)
-
-            article.download()
-
-            article.parse()
-
-            if article.text:
-
-                extracted = Article(
-                    url=url,
-                    title=article.title or "",
-                    word_count=len(article.text.split())
-                )
-
-                return ExtractedArticle(
-                    article=extracted,
-                    content=article.text
-                )
-
-        except Exception:
-            pass
-
-        raise Exception(
-            "Unable to extract article from this webpage."
+        return ExtractedArticle(
+            article=article,
+            content=content
         )

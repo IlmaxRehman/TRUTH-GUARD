@@ -1,0 +1,18 @@
+
+
+services:
+
+  truthguard-api:
+
+    build:
+      context: ./backend
+
+    container_name: truthguard-api
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./backend:/app
+
+    restart: unless-stopped
