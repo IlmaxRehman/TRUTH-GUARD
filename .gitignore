@@ -62,3 +62,6 @@ coverage/
 # ===========================
 generated-icon.png
 structure.txt
+
+backend/truthguard.db
+*.db
