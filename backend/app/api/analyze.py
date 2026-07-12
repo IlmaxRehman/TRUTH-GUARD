@@ -1,50 +1,19 @@
 from fastapi import APIRouter, HTTPException
 
-from app.models.analysis_result import AnalysisResult
+from app.pipeline.verification_pipeline import VerificationPipeline
 from app.schemas.analysis import AnalysisRequest
-
-from app.services.article_extractor import ArticleExtractor
-from app.services.claim_extractor import ClaimExtractor
-from app.services.evidence_retriever import EvidenceRetriever
-from app.services.evidence_ranker import EvidenceRanker
-from app.services.credibility_engine import CredibilityEngine
 
 router = APIRouter()
 
 
-@router.post("/analyze", response_model=AnalysisResult)
-def analyze(request: AnalysisRequest):
+@router.post("/verify")
+def verify(request: AnalysisRequest):
 
     try:
 
-        article_data = ArticleExtractor.extract(request.url)
+        pipeline = VerificationPipeline()
 
-        extractor = ClaimExtractor()
-        retriever = EvidenceRetriever()
-        ranker = EvidenceRanker()
-        engine = CredibilityEngine()
-
-        claims = extractor.extract(article_data.content)
-
-        for claim in claims:
-
-            evidence = retriever.search(claim.text)
-
-            ranked = ranker.rank(
-                claim.text,
-                evidence
-            )
-
-            claim.evidence = ranked
-
-            claim.credibility_score = engine.calculate(
-                ranked
-            )
-
-        return AnalysisResult(
-            article=article_data.article,
-            claims=claims
-        )
+        return pipeline.verify(request.url)
 
     except Exception as e:
 

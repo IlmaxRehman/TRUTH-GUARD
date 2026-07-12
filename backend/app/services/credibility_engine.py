@@ -22,7 +22,7 @@ class CredibilityEngine:
     def calculate(self, evidence_list: list[Evidence]):
 
         if not evidence_list:
-            return 0.0
+            return 0
 
         semantic = sum(e.score for e in evidence_list) / len(evidence_list)
 
@@ -31,9 +31,25 @@ class CredibilityEngine:
             for e in evidence_list
         ) / len(evidence_list)
 
-        final_score = (
+        final = (
             semantic * 0.65 +
             trust * 0.35
         ) * 100
 
-        return round(final_score, 2)
+        return round(final, 2)
+
+    def verdict(self, score: float):
+
+        if score >= 90:
+            return "Highly Credible", "Very High"
+
+        if score >= 75:
+            return "Likely Credible", "High"
+
+        if score >= 60:
+            return "Partially Supported", "Medium"
+
+        if score >= 40:
+            return "Weak Evidence", "Low"
+
+        return "Not Supported", "Very Low"
