@@ -8,6 +8,8 @@ from app.services.evidence_ranker import EvidenceRanker
 from app.services.credibility_engine import CredibilityEngine
 from app.services.explanation_generator import ExplanationGenerator
 
+from app.core.logger import logger
+
 
 class VerificationPipeline:
 
@@ -27,19 +29,33 @@ class VerificationPipeline:
 
     def verify(self, url: str):
 
+        logger.info("Verification pipeline started")
+
+        logger.info(f"Extracting article from: {url}")
+
         article_data = self.article_extractor.extract(url)
+
+        logger.info("Article extracted successfully")
+
+        logger.info("Extracting claims")
 
         claims = self.claim_extractor.extract(
             article_data.content
         )
 
+        logger.info(f"{len(claims)} claims extracted")
+
         scores = []
 
-        for claim in claims:
+        for index, claim in enumerate(claims, start=1):
+
+            logger.info(f"Processing claim {index}/{len(claims)}")
 
             evidence = self.evidence_retriever.search(
                 claim.text
             )
+
+            logger.info(f"Retrieved {len(evidence)} evidence sources")
 
             ranked = self.evidence_ranker.rank(
                 claim.text,
@@ -55,9 +71,9 @@ class VerificationPipeline:
             )
 
             reason = self.explanation_generator.generate(
-              claim,
-              ranked,
-              score
+                claim,
+                ranked,
+                score
             )
 
             claim.evidence = ranked
@@ -65,6 +81,10 @@ class VerificationPipeline:
             claim.verdict = verdict
             claim.confidence = confidence
             claim.reason = reason
+
+            logger.info(
+                f"Claim {index} scored {score:.2f} ({verdict})"
+            )
 
             scores.append(score)
 
@@ -97,6 +117,10 @@ class VerificationPipeline:
             f"important claims. "
             f"Overall credibility is "
             f"{overall_verdict.lower()}."
+        )
+
+        logger.info(
+            f"Verification completed with overall score {overall_score:.2f}"
         )
 
         return VerificationReport(

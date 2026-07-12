@@ -5,6 +5,7 @@ from app.database.database import get_db
 from app.pipeline.verification_pipeline import VerificationPipeline
 from app.repositories.verification_repository import VerificationRepository
 from app.schemas.analysis import AnalysisRequest
+import json
 
 router = APIRouter()
 
@@ -23,9 +24,13 @@ def verify(
 
         if cached:
 
-            print("✓ Returning cached verification")
+            from app.core.logger import logger
 
-            return cached.report_json
+            logger.info(
+              f"Cache hit for URL: {request.url}"
+            )
+
+            return json.loads(cached.report_json)
 
         pipeline = VerificationPipeline()
 

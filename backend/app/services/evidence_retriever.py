@@ -27,10 +27,9 @@ class EvidenceRetriever:
 
     def search(self, claim: str):
 
-        print("\n==============================")
-        print("Searching claim:")
-        print(claim)
-        print("==============================")
+        from app.core.logger import logger
+
+        logger.info(f"Searching evidence for claim: {claim}")
 
         response = self.client.search(
             query=claim,
