@@ -1,12 +1,4 @@
 # ===========================
-# Node.js
-# ===========================
-node_modules/
-dist/
-build/
-coverage/
-
-# ===========================
 # Python
 # ===========================
 backend/venv/
@@ -16,6 +8,8 @@ venv/
 
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
 *$py.class
 
 # ===========================
@@ -24,6 +18,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+backend/.env
 
 # ===========================
 # IDE
@@ -32,25 +27,38 @@ __pycache__/
 .idea/
 
 # ===========================
-# Logs
-# ===========================
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# ===========================
 # OS Files
 # ===========================
 .DS_Store
 Thumbs.db
 
 # ===========================
-# Build Artifacts
+# Logs
 # ===========================
+*.log
+logs/
+
+# ===========================
+# Build / Cache
+# ===========================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ===========================
+# Node (Chrome Extension)
+# ===========================
+node_modules/
+dist/
+build/
+coverage/
 .vite/
 *.tsbuildinfo
-generated-icon.png
 
-# Temporary files
+# ===========================
+# Temporary Files
+# ===========================
+generated-icon.png
 structure.txt
