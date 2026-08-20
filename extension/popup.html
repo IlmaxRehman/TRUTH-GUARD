@@ -1,64 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>TRUTH-GUARD</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      width: 300px;
-      padding: 15px;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-
-    h2 {
-      margin-top: 0;
-      font-size: 20px;
-      text-align: center;
-    }
-
-    #analyzeButton {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px;
-      width: 100%;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-bottom: 15px;
-    }
-
-    #analyzeButton:hover {
-      background-color: #0056b3;
-    }
-
-    #results {
-      font-size: 14px;
-    }
-
-    ul {
-      padding-left: 20px;
-    }
-
-    li {
-      margin-bottom: 8px;
-    }
-
-    em {
-      color: #666;
-    }
-
-    p {
-      margin: 8px 0;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>TruthGuard</title>
+<link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <h2>📰 TRUTH-GUARD</h2>
-  <button id="analyzeButton">🔍 Analyze Current Page</button>
-  <div id="results"></div>
+
+  <header class="masthead">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L4 5v6c0 5 3.4 8.6 8 11 4.6-2.4 8-6 8-11V5l-8-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M8.5 12l2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="mark-text">
+      <div class="wordmark">TruthGuard</div>
+      <div class="subhead">Case File Verification</div>
+    </div>
+  </header>
+
+  <div class="url-chip" id="urlChip">
+    <span class="url-chip-dot"></span>
+    <span class="url-chip-text" id="urlChipText">No page detected</span>
+  </div>
+
+  <button id="analyzeBtn" class="analyze-btn">Open Case &amp; Verify</button>
+
+  <div id="statusArea" class="status-area" hidden>
+    <div class="spinner"></div>
+    <p id="statusText">Reading the article&hellip;</p>
+  </div>
+
+  <div id="errorArea" class="error-area" hidden>
+    <p class="error-title">Case closed — no verdict</p>
+    <p id="errorText" class="error-text"></p>
+    <button id="retryBtn" class="retry-btn">Try again</button>
+  </div>
+
+  <main id="results" class="results" hidden>
+
+    <section class="verdict-block">
+      <div class="stamp" id="overallStamp">
+        <span id="overallStampText">PENDING</span>
+      </div>
+      <div class="article-meta">
+        <div class="article-title" id="articleTitle">&mdash;</div>
+        <div class="score-row">
+          <div class="score-track"><div class="score-fill" id="scoreFill"></div></div>
+          <span class="score-num" id="scoreNum">&mdash;</span>
+        </div>
+        <div class="confidence-line">Confidence: <span id="confidenceText">&mdash;</span></div>
+      </div>
+    </section>
+
+    <section class="summary-block">
+      <div class="section-label">Field Notes</div>
+      <p class="summary-text" id="summaryText"></p>
+    </section>
+
+    <section class="claims-block">
+      <div class="section-label">Claims Reviewed <span id="claimsCount" class="count-badge">0</span></div>
+      <div id="claimsList" class="claims-list"></div>
+    </section>
+
+  </main>
+
+  <footer class="foot-note">Backed by AI research — always cross-check important claims yourself.</footer>
 
   <script src="popup.js"></script>
 </body>
